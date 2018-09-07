@@ -40,6 +40,11 @@ serial number and returns their handle /dev/tty...
 This is in file *liblab_pid_omega_cni.py* in line 8 as BAUD.
 
 
+In the installation directory type
+```
+python server.py
+```
+to start the telnet server.
 Once the server is up and running on localhost on default port 51234, just telnet
 to it.
 The following is the list of supported commands, that should be typed without spaces.
