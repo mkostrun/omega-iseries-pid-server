@@ -1,6 +1,7 @@
 # omega-iseries-pid-server
 
-This is a telnet server for a computer preferrably running linux, written in python.
+This provides a computer controlled PID controller controling a hot plate.
+It is a telnet server for a computer preferrably running linux, written in python.
 The hardware for this PID telnet server comprises of
 
 - Omega PID controller from iSeries, e.g., CNI3244-C24, which was used in development
@@ -41,9 +42,38 @@ This is in file *liblab_pid_omega_cni.py* in line 8 as BAUD.
 
 Once the server is up and running on localhost on default port 51234, just telnet
 to it.
-The following is the list of supported commands:
+The following is the list of supported commands, that should be typed without spaces.
 
-- *alarm=0,1* - disable/enambe alarm
+- *alarm=0,1* - disable/enable alarm
+
+- *standby* - enter standby mode (front panel start to blink 'stby').
+The manual (see doc directory) requires user to enter standby every time configuration
+of the device changes.
+
+- *run* - enter run mode.
+
+- *val* - report current thermocouple reading.
+
+The following commands can be used to set values or to query existing values.
+If the key word is written without '=val' part then it returns current value.
+E.g., typing 'timepid' and pressing enter will report current status of the
+configuration bits 'timepid' (it appears in OUT1CFG and OUT2CFG, and this sets both
+to the same):
+
+- *timepid=0,1* - set configuration bit to enable/disable time proportional PID.
+
+- *full_id* - set 4 digit password that users will have to input to get the access to
+the features of the PID controller.
+
+- *sp_id* - set 4 digit password that users will have to input to change the set point
+of the PID controller (the temperature that the hot plate should reach).
+
+- *direct=0,1* - set revers (0) or direct (1) type of control for the PID controlled
+device. The reverse devices are, e.g., hot plates. The direct devices are, e.g., chillers.
+
+- *autotune* 1
+
+
 
 
 
