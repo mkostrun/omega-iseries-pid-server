@@ -60,7 +60,10 @@ The following commands can be used to set values or to query existing values.
 If the key word is written without '=val' part then it returns current value.
 E.g., typing 'timepid' and pressing enter will report current status of the
 configuration bits 'timepid' (it appears in OUT1CFG and OUT2CFG, and this sets both
-to the same):
+to the same). If the value is set, then the server responds with 'OK'.
+The values are always written to RAM (unless they refer to registers, in which case
+they are written to EEPROM). To transfer RAM value to EEPROM, user has to use
+command 'store keyword'.
 
 - *timepid=0,1* - set configuration bit to enable/disable time proportional,
  that is, P in PID.
@@ -94,17 +97,52 @@ for bigger devices). The commands *cycle* and *cycle1* both pertain to control o
 
 ## Examples
 
-### Set Hot Plate to Temperature 101.3 deg C
+### Set Hot Plate to a Temperature 101.3 deg C
 ```
 restart
 run
 sp1=101.3
 ```
 
+### Make PID controller auto-tune itself at a Temperature 101.3 deg C
+```
+restart
+standby
+autotune=1
+OK
+autopid=1
+OK
+sp1=101.3
+store sp1
+sp1=101.3 stored
+restart
+```
 
+Upon exiting the restart the controller enters auto-tune, and stays there until
+it figures out the values of the parameters.
 
+User can query progress of auto-tuning by issuing
 
+```
+autotune
+1
+```
 
+When this returns '0' the PID controller has completed auto-tune and the
+values of the PID parameters are stored in RAM. To transfer them to
+EEPROM issue
+```
+store reset
+reset=nnnn stored
+store band
+band=mmmm stored
+store cycle
+cycle=kkkk stored
+store rate
+rate=uuuu stored
+```
+
+And that is it.
 
 
 
