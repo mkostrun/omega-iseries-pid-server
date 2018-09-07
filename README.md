@@ -120,8 +120,12 @@ room temperature.
 ```
 sp1=101.3
 ```
+Go have coffee (or perhaps, cofefe?)
 
-### Make PID controller auto-tune itself at a Temperature 101.3 deg C
+### Make PID controller auto-tune at a Temperature 101.3 deg C
+
+Disable not needed parameters using commands above.
+
 ```
 restart
 standby
