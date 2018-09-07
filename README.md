@@ -54,13 +54,16 @@ of the device changes.
 
 - *val* - report current thermocouple reading.
 
+- *restart* - just like its name says.
+
 The following commands can be used to set values or to query existing values.
 If the key word is written without '=val' part then it returns current value.
 E.g., typing 'timepid' and pressing enter will report current status of the
 configuration bits 'timepid' (it appears in OUT1CFG and OUT2CFG, and this sets both
 to the same):
 
-- *timepid=0,1* - set configuration bit to enable/disable time proportional PID.
+- *timepid=0,1* - set configuration bit to enable/disable time proportional,
+ that is, P in PID.
 
 - *full_id* - set 4 digit password that users will have to input to get the access to
 the features of the PID controller.
@@ -68,10 +71,33 @@ the features of the PID controller.
 - *sp_id* - set 4 digit password that users will have to input to change the set point
 of the PID controller (the temperature that the hot plate should reach).
 
-- *direct=0,1* - set revers (0) or direct (1) type of control for the PID controlled
+- *direct=0,1* - set reverse (0) or direct (1) type of control for the PID controlled
 device. The reverse devices are, e.g., hot plates. The direct devices are, e.g., chillers.
 
-- *autotune* 1
+- *autotune=0,1* - reques auto tuning of the PID controller, see below for details.
+
+- *anitwindup=0,1* - enable/disable anti-wind-up (integral), that is 'I' in PID.
+
+- *damping=0:7* - set/query damping in the PID control loop.
+
+- *cycle,cycle1,cycle2=0:199* - set/query cycle time (under 7 for SSR controlled hot plates, greater value
+for bigger devices). The commands *cycle* and *cycle1* both pertain to control of OUTPUT1.
+
+- *band,band1,band2=0:9999* - set/query proportional band parameter for OUTPUT1 and OUTPUT2.
+
+- *raset,reset1,reset2=0:3999* - set/query reset parameter for OUTPUT1 and OUTPUT2.
+
+- *rate,rate1,rate2=0:3999* - set/query rate parameter for OUTPUT1 and OUTPUT2.
+
+- *sp1,sp2=nnnn.n* - set/query the set point 1 (OUTPUT1) and 2 (OUTPUT2).
+
+
+
+
+
+
+
+
 
 
 
