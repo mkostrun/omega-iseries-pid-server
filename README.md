@@ -158,17 +158,24 @@ store reset
 reset=nnnn stored
 store band
 band=mmmm stored
-store cycle
-cycle=kkkk stored
 store rate
 rate=uuuu stored
 ```
 
 And that is it.
 
+### Ramp and Soak Hot Plate from 30 deg C to 60 deg C
 
+See rlab code in directory rlabplus.
+It establishes a connection to hot plate telnet server and
+every so often issues a new set point command so that the
+target temperature is reached at the desired rate.
 
+For well tuned PID controller, the ramp rate is
+achieavable within 1% error, and so is the target temperature.
 
+For poorly tuned PID controller, well...
+see illustration in the directory.
 
 
 
