@@ -9,8 +9,7 @@ temp_delta = 1; // increase in temperature for sp1
 
 time_soak = 30; // min
 
-url = "tcp://10.242.14.139:51234";
-// url = "tcp://192.168.2.18:51234";
+url = "tcp://1.2.3.4:51234";
 open(url);
 
 // set sp1 to temp_start
