@@ -65,10 +65,10 @@ to the same):
 - *timepid=0,1* - set configuration bit to enable/disable time proportional,
  that is, P in PID.
 
-- *full_id* - set 4 digit password that users will have to input to get the access to
+- *full_id=0000* - set 4 digit password that users will have to input to get the access to
 the features of the PID controller.
 
-- *sp_id* - set 4 digit password that users will have to input to change the set point
+- *sp_id=0000* - set 4 digit password that users will have to input to change the set point
 of the PID controller (the temperature that the hot plate should reach).
 
 - *direct=0,1* - set reverse (0) or direct (1) type of control for the PID controlled
@@ -90,6 +90,16 @@ for bigger devices). The commands *cycle* and *cycle1* both pertain to control o
 - *rate,rate1,rate2=0:3999* - set/query rate parameter for OUTPUT1 and OUTPUT2.
 
 - *sp1,sp2=nnnn.n* - set/query the set point 1 (OUTPUT1) and 2 (OUTPUT2).
+
+
+## Examples
+
+### Set Hot Plate to Temperature 101.3 deg C
+```
+restart
+run
+sp1=101.3
+```
 
 
 
