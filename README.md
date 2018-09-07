@@ -95,12 +95,28 @@ for bigger devices). The commands *cycle* and *cycle1* both pertain to control o
 - *sp1,sp2=nnnn.n* - set/query the set point 1 (OUTPUT1) and 2 (OUTPUT2).
 
 
+The following commands are not really supported by the PID controller, or so
+the application engineers claim
+
+- *ramp=0,1* - query/set ramp feature.
+
+- *ramptime=hr,min* - query/set ramp time to that many hours and minutes.
+
+- *soak=0,1* - query/set soak feature.
+
+- *soaktime=hr,min* - set/query soak time in hours and minutes.
+
+Note: In theory the PID controller could ramp the hot plate to set point 1 (using sp1=nnnn.n)
+in amount of time given in 'ramptime', and then maintain the hot plate
+temperature at that value for duration of 'soaktime'.
+Afterwards it would turn-off the hot plate allowing its temperature to drop to
+room temperature.
+
+
 ## Examples
 
 ### Set Hot Plate to a Temperature 101.3 deg C
 ```
-restart
-run
 sp1=101.3
 ```
 
@@ -113,6 +129,7 @@ OK
 autopid=1
 OK
 sp1=101.3
+OK
 store sp1
 sp1=101.3 stored
 restart
