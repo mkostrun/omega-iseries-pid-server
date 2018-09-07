@@ -31,10 +31,19 @@ Before the server is started the following needs to be configured:
 1. Know the serial number of your serial-to-USB cable. This was verified to work under
 linux debian and opensuse. Last checked Windoze version was 7. No guarantee is made that it
 still works under Windoze.
-The serial number needs to be inserted in *server.py*, line 17 as PID_SN
+The serial number needs to be inserted in *server.py*, line 17 as PID_SN.
+The file *server.py* has a piece of code that search the serial devices by their
+serial number and returns their handle /dev/tty...
 
 2. Omega PID serial port communication parameters need to be configured by hand.
-This is in file *liblab_pid_omega_cni.py* in line 8 as BAUD
+This is in file *liblab_pid_omega_cni.py* in line 8 as BAUD.
+
+
+Once the server is up and running on localhost on default port 51234, just telnet
+to it.
+The following is the list of supported commands:
+
+- *alarm=0,1* - disable/enambe alarm
 
 
 
