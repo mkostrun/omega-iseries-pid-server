@@ -63,7 +63,7 @@ configuration bits 'timepid' (it appears in OUT1CFG and OUT2CFG, and this sets b
 to the same). If the value is set, then the server responds with 'OK'.
 The values are always written to RAM (unless they refer to registers, in which case
 they are written to EEPROM). To transfer RAM value to EEPROM, user has to use
-command 'store keyword'.
+command *store* 'keyword'.
 
 - *timepid=0,1* - set configuration bit to enable/disable time proportional,
  that is, P in PID.
@@ -106,9 +106,10 @@ the application engineers claim
 
 - *soaktime=hr,min* - set/query soak time in hours and minutes.
 
-Note: In theory the PID controller could ramp the hot plate to set point 1 (using sp1=nnnn.n)
-in amount of time given in 'ramptime', and then maintain the hot plate
-temperature at that value for duration of 'soaktime'.
+Note: In theory the PID controller could ramp the hot plate to set point 1 (previously
+set with *sp1=nnnn.n*)
+in amount of time given in *ramptime*, and then maintain the hot plate
+temperature at that value for duration of *soaktime*.
 Afterwards it would turn-off the hot plate allowing its temperature to drop to
 room temperature.
 
