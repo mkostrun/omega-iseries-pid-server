@@ -264,7 +264,10 @@ and these values are *store*d in EEPROM
 sp1=30
 ```
 Now wait for hot plate to reach that temperature.
+
+Once there, go with this
 ```
+standby
 soaktime=0,30
 OK
 ramptime=0,30
@@ -276,7 +279,7 @@ OK
 sp1=60
 OK
 store sp1
-sp1=50.0 stored
+sp1=60.0 stored
 restart
 ```
 
