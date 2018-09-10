@@ -160,6 +160,8 @@ all the messages created by the server operation are posted.
 Each message is prepended by the time stamp.
 These messages comprise of three groups:
 
+- WARNING: messages about progress of the software and some transactions.
+
 - ERROR: error messages when some commands have failed.
 
 - DEBUG: all received communication by the server including commands and their parametes.
@@ -240,7 +242,7 @@ rate=uuuu stored
 
 And that is it.
 
-### Ramp and Soak Hot Plate from 30 deg C to 60 deg C
+### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min, Take 1
 
 See rlab code in directory rlabplus.
 It establishes a connection to hot plate telnet server and
@@ -253,5 +255,33 @@ achieavable within 1% error, and so is the target temperature.
 For poorly tuned PID controller, well...
 see illustration in the directory.
 
+
+### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min, Take 2
+
+This assumes you have tuned your PID controller at some point,
+and these values are *store*d in EEPROM 
+```
+sp1=30
+```
+Now wait for hot plate to reach that temperature.
+```
+soaktime=0,30
+OK
+ramptime=0,30
+OK
+soak=1
+OK
+ramp=1
+OK
+sp1=60
+OK
+store sp1
+sp1=50.0 stored
+restart
+```
+
+When PID controller completes the restart, it will first flash the target
+value of *sp1* then switch to displaying current thermocouple reading
+where the blinking character 'O' (or '0', can't tell) will be prepended.
 
 
