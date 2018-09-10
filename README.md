@@ -18,13 +18,17 @@ POSSIBILITY OF SUCH DAMAGE.
 This software allows a computer to controll an Omega PID controller iSeries to
 control a hot plate.
 
-The hot plate is involved, thus disclaimer above.
+The hot plate is involved, thus disclaimer above. I repeat ...
 
-Don't do it. Failed or improperly configured PID controllers operating high
+*Don't do it. Failed or improperly configured PID controllers operating high
 temperature stoves, furnaces and burners are known to have caused significant
-if not total demage to people's property.
+if not total damage to people's property.
+Even though you are so smart (that you are consulting github pages on how to heat
+up the things) this could happen to you.
+So, don't do it! Go away! Delete stored bookmark to this page and never come back!*
 
-It is a telnet server for a computer preferrably running linux, written in python.
+This being said,
+it is a telnet server for a computer preferrably running linux, written in python.
 The hardware for this PID telnet server comprises of
 
 - Omega PID controller from iSeries, e.g., CNI3244-C24, which was used in development
