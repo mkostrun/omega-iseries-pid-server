@@ -293,6 +293,9 @@ ramp
 ```
 Once *ramp*ing is completed this returns *0*.
 Also, upon completion of ramping the blinking '0' dissappears, as well.
-The same then applies to *soak*.
+
+Querying the progress of *soak* is done the same way.
+Upon completion of soak the hot plate is turned off, so don't forget to
+reset the set point at turn-on value to sp1.
 
 
