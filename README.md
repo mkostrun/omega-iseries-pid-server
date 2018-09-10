@@ -296,6 +296,9 @@ Also, upon completion of ramping the blinking '0' dissappears, as well.
 
 Querying the progress of *soak* is done the same way.
 Upon completion of soak the hot plate is turned off, so don't forget to
-reset the set point at turn-on value to sp1.
-
+reset the set point at turn-on value, e.g., 
+```
+sp1=22
+store sp1
+```
 
