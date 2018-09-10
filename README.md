@@ -295,8 +295,9 @@ Once *ramp*ing is completed this returns *0*.
 Also, upon completion of ramping the blinking '0' dissappears, as well.
 
 Querying the progress of *soak* is done the same way.
-Upon completion of soak the PID enters *standby* state and
-the hot plate is turned off.
+
+Upon completion of soak the PID enters *standby* state,
+in which *ramp=1* and *soak=1* again, but the hot plate is turned off.
 
 At this time it is neccessary to turn-off *ramp* and *soak*
 and re-set the set point 1 to (the value I prefer of) 22.0 C:
@@ -309,5 +310,9 @@ sp1=22
 OK
 store sp1
 sp1=22.0 stored
+restart
 ```
+
+If *soak* and *ramp* are not set to 0 before *restart*,
+the PID controller will report error, and will not proceed with executions of commands.
 
