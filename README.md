@@ -131,7 +131,6 @@ for bigger devices). The commands *cycle* and *cycle1* both pertain to control o
 
 - *sp1,sp2=nnnn.n* - set/query the set point 1 (OUTPUT1) and 2 (OUTPUT2).
 
-
 The following commands are not really supported by the PID controller, or so
 the application engineers claim
 
@@ -142,14 +141,6 @@ the application engineers claim
 - *soak=0,1* - query/set soak feature.
 
 - *soaktime=hr,min* - set/query soak time in hours and minutes.
-
-Note: In theory the PID controller could ramp the hot plate to set point 1 (previously
-set with *sp1=nnnn.n*)
-in amount of time given in *ramptime*, and then maintain the hot plate
-temperature at that value for duration of *soaktime*.
-Afterwards it would turn-off the hot plate allowing its temperature to drop to
-room temperature.
-
 
 ## Examples
 
@@ -258,8 +249,16 @@ see illustration in the directory.
 
 ### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min, Take 2
 
-This assumes you have tuned your PID controller at some point,
-and these values are *store*d in EEPROM 
+In theory the PID controller could ramp the hot plate to set point 1 (previously
+set with *sp1=nnnn.n*) 
+in amount of time given in *ramptime*, and then maintain the hot plate
+temperature at that value for duration of *soaktime*.
+Afterwards it would turn-off the hot plate allowing its temperature to drop to
+room temperature.
+
+Assuming you have tuned your PID controller at some point,
+and these values are *store*d in EEPROM, this is how the story is translated
+to commands to the server:
 ```
 sp1=30
 ```
