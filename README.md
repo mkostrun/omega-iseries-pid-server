@@ -74,6 +74,11 @@ python server.py
 to start the telnet server.
 Once the server is up and running on localhost on default port 51234, just telnet
 to it.
+
+- sending a message prepended by '#' causes the message to be posted in the server
+log file called *stove-${hostname}-${pid serial number}.log*.
+The messages are posted to log file without '#' character.
+
 The following is the list of supported commands, that should be typed without spaces.
 
 - *alarm=0,1* - disable/enable alarm
@@ -148,7 +153,7 @@ room temperature.
 
 ## Examples
 
-### For Legal Reasons
+### Data Logger
 
 The telnet server creates a log file in the same directory in which
 all the messages created by the server operation are posted.
