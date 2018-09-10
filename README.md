@@ -1,6 +1,29 @@
 # omega-iseries-pid-server
 
-This provides a computer controlled PID controller controling a hot plate.
+## But First
+
+THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+## About
+
+This software allows a computer to controll an Omega PID controller iSeries to
+control a hot plate.
+
+The hot plate is involved, thus disclaimer above.
+
+Don't do it. Failed or improperly configured PID controllers operating high
+temperature stoves, furnaces and burners are known to have caused significant
+if not total demage to people's property.
+
 It is a telnet server for a computer preferrably running linux, written in python.
 The hardware for this PID telnet server comprises of
 
