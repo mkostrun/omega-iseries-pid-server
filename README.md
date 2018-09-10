@@ -148,6 +148,45 @@ room temperature.
 
 ## Examples
 
+### For Legal Reasons
+
+The telnet server creates a log file in the same directory in which
+all the messages created by the server operation are posted.
+Each message is prepended by the time stamp.
+These messages comprise of three groups:
+
+- ERROR: error messages when some commands have failed.
+
+- DEBUG: all received communication by the server including commands and their parametes.
+
+- INFO: every 5 seconds the server writes to the log what was the temperature of the hot plate.
+Consider a snippet from a logfile
+```
+2018-09-05T09:16:08-0400 WARNING  Server socket created
+2018-09-05T09:16:08-0400 WARNING  Server socket bind complete
+2018-09-05T09:16:08-0400 WARNING  Server listening on port 51235
+2018-09-05T09:16:12-0400 WARNING  Connected with 11.12.13.14:48288
+2018-09-05T09:16:15-0400 DEBUG    standby
+2018-09-05T09:16:19-0400 INFO     20.9 C
+2018-09-05T09:16:25-0400 INFO     21.3 C
+2018-09-05T09:16:26-0400 DEBUG    soak=1
+2018-09-05T09:16:31-0400 INFO     20.9 C
+2018-09-05T09:16:31-0400 DEBUG    ramp=1
+2018-09-05T09:16:37-0400 INFO     21.0 C
+2018-09-05T09:16:41-0400 DEBUG    soaktime=[1,20]
+2018-09-05T09:16:44-0400 INFO     20.7 C
+2018-09-05T09:16:50-0400 INFO     21.3 C
+2018-09-05T09:16:56-0400 INFO     20.8 C
+2018-09-05T09:16:56-0400 DEBUG    ramptime=[0,30]
+2018-09-05T09:17:01-0400 INFO     20.9 C
+2018-09-05T09:17:02-0400 DEBUG    soaktime=[0,30]
+2018-09-05T09:17:08-0400 INFO     21.2 C
+2018-09-05T09:17:08-0400 DEBUG    sp1=30
+2018-09-05T09:17:14-0400 INFO     21.2 C
+2018-09-05T09:17:20-0400 INFO     20.8 C
+2018-09-05T09:17:20-0400 DEBUG    sp2=60
+```
+
 ### Set Hot Plate to a Temperature 101.3 deg C
 ```
 sp1=101.3
@@ -208,7 +247,6 @@ achieavable within 1% error, and so is the target temperature.
 
 For poorly tuned PID controller, well...
 see illustration in the directory.
-
 
 
 
