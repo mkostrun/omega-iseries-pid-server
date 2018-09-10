@@ -131,7 +131,7 @@ def clientthread(conn):
     data = data[:-1]
     # client is allowed to directly write to the log
     # if the message is prepended with '#'
-    if (data[0] == "#")
+    if (data[0] == '#'):
       logger.debug(data[1:])
       continue
     logger.debug(data)
