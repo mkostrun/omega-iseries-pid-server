@@ -292,6 +292,7 @@ ramp
 1
 ```
 Once *ramp*ing is completed this returns *0*.
+Also, upon completion of ramping the blinking '0' dissappears, as well.
 The same then applies to *soak*.
 
 
