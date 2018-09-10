@@ -286,4 +286,12 @@ When PID controller completes the restart, it will first flash the target
 value of *sp1* then switch to displaying current thermocouple reading
 where the blinking character 'O' (or '0', can't tell) will be prepended.
 
+The user may query progress of the ramp or soak by issuing, e.g., 
+```
+ramp
+1
+```
+Once *ramp*ing is completed this returns *0*.
+The same then applies to *soak*.
+
 
