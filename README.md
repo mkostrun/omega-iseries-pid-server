@@ -207,6 +207,11 @@ rate=uuuu stored
 
 And that is it.
 
+![image1](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-stove-pid.png?raw=true)
+
+The figure shows difference in hot plate temperature for
+well tuned vs. poorly tuned PID controller.
+
 ### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min
 
 #### Take 1 - Telnet client direct control
@@ -215,12 +220,6 @@ See rlab code in directory rlabplus.
 It establishes a connection to hot plate telnet server and
 every so often issues a new set point command so that the
 target temperature is reached at the desired rate.
-
-![image1](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-stove-pid.png?raw=true)
-
-The figure shows difference in hot plate temperature for
-well tuned vs. poorly tuned PID controller.
-
 
 #### Take 2 - Using built-in ramp/soak functionality
 
@@ -291,3 +290,4 @@ restart
 If *soak* and *ramp* are not set to 0 before *restart*,
 the PID controller will report error, and will not proceed with executions of commands.
 
+![image2](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-resistor-pid.png?raw=true)
