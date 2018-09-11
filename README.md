@@ -216,13 +216,10 @@ It establishes a connection to hot plate telnet server and
 every so often issues a new set point command so that the
 target temperature is reached at the desired rate.
 
-For well tuned PID controller, the ramp rate is
-achievable within 1% error, and so is the target temperature.
-
 ![image1](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-stove-pid.png?raw=true)
 
-For poorly tuned PID controller, well...
-see illustration in the directory.
+The figure shows difference in hot plate temperature for
+well tuned vs. poorly tuned PID controller.
 
 
 #### Take 2 - Using built-in ramp/soak functionality
