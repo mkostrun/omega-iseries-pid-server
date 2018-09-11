@@ -1,34 +1,8 @@
 # omega-iseries-pid-server
 
-## But First
-
-THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES,
-INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
-
-## About
-
 This software allows a computer to controll an Omega PID controller iSeries to
 control a hot plate.
-
-The hot plate is involved, thus disclaimer above. I repeat ...
-
-*Don't do it. Failed or improperly configured PID controllers operating high
-temperature stoves, furnaces and burners are known to have caused significant
-if not total damage to people's property.
-Even though you are so smart (that you are consulting github pages on how to heat
-up the things) this could happen to you.
-So, don't do it! Go away! Delete stored bookmark to this page and never come back!*
-
-This being said,
-it is a telnet server for a computer preferrably running linux, written in python.
+It is a telnet server for a computer preferrably running linux, written in python.
 The hardware for this PID telnet server comprises of
 
 - Omega PID controller from iSeries, e.g., CNI3244-C24, which was used in development
@@ -233,7 +207,9 @@ rate=uuuu stored
 
 And that is it.
 
-### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min, Take 1
+### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min
+
+#### Take 1 - Telnet client direct control
 
 See rlab code in directory rlabplus.
 It establishes a connection to hot plate telnet server and
@@ -241,13 +217,15 @@ every so often issues a new set point command so that the
 target temperature is reached at the desired rate.
 
 For well tuned PID controller, the ramp rate is
-achieavable within 1% error, and so is the target temperature.
+achievable within 1% error, and so is the target temperature.
+
+<img src="./rlabplus/hotsplate-stove.pid.png" height="300"/>
 
 For poorly tuned PID controller, well...
 see illustration in the directory.
 
 
-### Ramp and Soak Hot Plate from 30 deg C to 60 deg C at 1 deg C/min, Take 2
+#### Take 2 - Using built-in ramp/soak functionality
 
 In theory the PID controller could ramp the hot plate to set point 1 (previously
 set with *sp1=nnnn.n*) 
