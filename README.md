@@ -219,7 +219,7 @@ target temperature is reached at the desired rate.
 For well tuned PID controller, the ramp rate is
 achievable within 1% error, and so is the target temperature.
 
-<img src="hotsplate-stove-pid.png" height="300"/>
+![image1](hotsplate-stove-pid.png)
 
 For poorly tuned PID controller, well...
 see illustration in the directory.
