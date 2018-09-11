@@ -272,6 +272,19 @@ Querying the progress of *soak* is done the same way.
 
 Upon completion of soak the PID enters *standby* state,
 in which *ramp=1* and *soak=1* again, but the hot plate is turned off.
+As there is no internal register that allows the state of the
+PID controller to be accessed remotely, one way of figuring out
+that the system is in *standby* post *ramp* and *soak* could be;
+```
+ramp
+1
+soak
+1
+sp1
+'should report soak temperature'
+val
+'should report some lower temperature as the stove cools down after being turned off'
+```
 
 At this time it is neccessary to turn-off *ramp* and *soak*
 and re-set the set point 1 to (the value I prefer of) 22.0 C:
