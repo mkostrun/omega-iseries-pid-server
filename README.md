@@ -290,4 +290,14 @@ restart
 If *soak* and *ramp* are not set to 0 before *restart*,
 the PID controller will report error, and will not proceed with executions of commands.
 
+
 ![image2](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-resistor-pid2.png?raw=true)
+
+The figure compares two ways of ramp and soak, one by using built in functionality
+and the other via a telnet client that regularly changes *sp1*.
+While telnet client allows for better control of starting point (after the controller is
+put in *standby* mode OUTPUT1 is no longer active and its temperature may start to drop),
+the built-in function may be better in case of crash of the telnet server: this would not
+affect the ramp/soak of the PID, but it would stuck the PID on the last sp1 command
+it received from the client (and possibly burn down the lab, because at that particular
+sp1 the stove should not be left for too long).
