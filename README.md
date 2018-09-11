@@ -311,7 +311,7 @@ and the other via a telnet client that regularly changes *sp1*.
 While telnet client allows for better control of starting point (after the controller is
 put in *standby* mode OUTPUT1 is no longer active and its temperature may start to drop),
 the built-in function may be better in case of crash of the telnet server.
-In the former case the ramp/soak of the PID would not be affected,
-while in the latter the PID would end up being stuck on the last sp1 command
+If the built-in function is used then the ramp/soak of the PID would not be affected,
+while if the telnet client is used the PID would end up being stuck on the last sp1 command
 it received from the client (and possibly burn down the lab, because at that particular
 sp1 the stove should not be left for too long unattanded).
