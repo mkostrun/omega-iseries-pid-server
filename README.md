@@ -290,4 +290,4 @@ restart
 If *soak* and *ramp* are not set to 0 before *restart*,
 the PID controller will report error, and will not proceed with executions of commands.
 
-![image2](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-resistor-pid.png?raw=true)
+![image2](https://github.com/mkostrun/omega-iseries-pid-server/blob/master/rlabplus/hotplate-resistor-pid2.png?raw=true)
