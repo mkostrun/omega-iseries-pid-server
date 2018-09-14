@@ -166,6 +166,8 @@ a separate file in a format
 2018-09-05T09:16:19-0400 20.9
 2018-09-05T09:16:25-0400 21.3
 ...
+```
+
 Please note, the time string is gnulib compliant, so the gnulib function *dstr2time* can
 extract the time information from it.
 
