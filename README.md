@@ -159,6 +159,17 @@ Consider a snippet from a logfile
 2018-09-05T09:17:20-0400 DEBUG    sp2=60
 ```
 
+The linux bash script *extrdata.sh* takes as an input the log file, and the start and end
+time stamps (see log file example above) and extracts all INFO messages in that range in
+a separate file in a format 
+```
+2018-09-05T09:16:19-0400 20.9
+2018-09-05T09:16:25-0400 21.3
+...
+Please note, the time string is gnulib compliant, so the gnulib function *dstr2time* can
+extract the time information from it.
+
+
 ### Set Hot Plate to a Temperature 101.3 deg C
 ```
 sp1=101.3
