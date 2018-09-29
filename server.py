@@ -25,14 +25,31 @@ from time import time
 #
 # setup telnet server:
 PORT = 51234
-HOST = ''     # Symbolic name, meaning all available interfaces
 SOCKET_TIMEOUT_S = 2
+HOST = ''     # Symbolic name, meaning all available interfaces
+HOSTNAME = socket.gethostname()
 
-# setup device:
-#PID_SN = 'AI02C685'
-PID_SN = 'A501IJOL'
-LOG_TIME_DT_S = 5
-LOG_FILENAME = './stove-'+socket.gethostname()+'-'+PID_SN+'.log'
+#
+# setup serial device:
+#
+PID_SN = None
+if ('stove' in HOSTNAME):
+  PID_SN = 'AI02C685'
+elif ('coil' in HOSTNAME ):
+  PID_SN = 'AE01IRJY'
+elif ('caligula' in HOSTNAME):
+  PID_SN = 'A501IJOL'
+
+#
+# No serial device: Nothing to do
+#
+if (PID_SN is None):
+  sys.exit()
+
+
+LOG_TIME_DT_NONE_S = 60
+LOG_TIME_DT_CONN_S = 5
+LOG_FILENAME = './stove-'+HOSTNAME+'-'+PID_SN+'.log'
 
 import logging
 import subprocess
@@ -64,6 +81,8 @@ except NameError:
   execfile('liblab_pid_omega_cni.py')
   stove = omega_pid(PID_SN)
   sleep(1)
+  stove.standby(status=1)
+  sleep(1)
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -73,7 +92,7 @@ num_connections=0
 
 # Bind socket to local host and port
 try:
-  s.bind((HOST, PORT))
+  s.bind(('', PORT))
 except socket.error as msg:
   logger.error( 'Server socket bind failed: ' + msg[1] + ', error no. ' + str(msg[0]))
   sys.exit()
@@ -85,7 +104,7 @@ logger.warning( 'Server listening on port ' + str(PORT) )
 
 # Function for handling connections. This will be used to create threads
 def clientthread(conn):
-  global num_connections,LOG_TIME_DT_S
+  global num_connections,LOG_TIME_DT_CONN_S
   #
   # only one thread can communicate with the stove
   #
@@ -105,7 +124,7 @@ def clientthread(conn):
     # log the status of the stove
     #
     t_now_s = time()
-    if (t_now_s - t_0_s > LOG_TIME_DT_S):
+    if (t_now_s - t_0_s > LOG_TIME_DT_CONN_S):
       t_0_s = t_now_s
       rval = stove.val()
       logger.info(str(rval) + ' C')
@@ -184,26 +203,35 @@ def clientthread(conn):
     #
     #
     #
-    if ('timepid' in data):
-      if (data.find('=') == 7):
+    if (('timepid' in data) or ('timepid1' in data) or ('timepid2' in data)):
+      if ('timepid1' in data):
+        off=1
+        idx=1
+      elif ('timepid2' in data):
+        off=1
+        idx=2
+      elif ('timepid' in data):
+        off=0
+        idx=1
+      if (data.find('=') == 7+off):
         # process cycle=nnn
         try:
-          val = int(data[8:])
+          val = int(data[8+off:])
         except ValueError:
           conn.sendall('?'+'\n')
           continue
-        stove.out1cnf(time_prop=(val!=0))
-        stove.out2cnf(time_prop=(val!=0))
+        if ('timepid2' in data):
+          stove.out2cnf(time_prop=(val!=0))
+        else:
+          stove.out1cnf(time_prop=(val!=0))
         conn.sendall('OK'+'\n')
       else:
-        rval1 = int(stove.out1cnf()%2)
-        rval2 = int(stove.out2cnf()%2)
-        if (rval1==rval2):
-          conn.sendall(str(rval1)+'\n')
-          logger.debug(str(rval1))
+        if ('timepid2' in data):
+          rval = int(stove.out2cnf()%2)
         else:
-          conn.sendall(str(rval1)+'!='+str(rval2)+'\n')
-          logger.debug(str(rval1)+'!='+str(rval2))
+          rval = int(stove.out1cnf()%2)
+        conn.sendall(str(rval)+'\n')
+        logger.debug(str(rval))
     #
     #
     #
@@ -243,26 +271,35 @@ def clientthread(conn):
     #
     #
     #
-    if ('direct' in data):
-      if (data.find('=') == 6):
+    if (('direct' in data) or ('direct1' in data) or ('direct2' in data)):
+      if ('direct' in data):
+        off=0
+        idx=1
+      if ('direct1' in data):
+        off=1
+        idx=1
+      if ('direct2' in data):
+        off=1
+        idx=2
+      if (data.find('=') == 6+off):
         # process cycle=nnn
         try:
-          val = int(data[7:])
+          val = int(data[7+off:])
         except ValueError:
           conn.sendall('?'+'\n')
           continue
-        stove.out1cnf(enable_direct=(val!=0))
-        stove.out2cnf(enable_direct=(val!=0))
+        if ('direct2' in data):
+          stove.out2cnf(enable_direct=(val!=0))
+        else:
+          stove.out1cnf(enable_direct=(val!=0))
         conn.sendall('OK'+'\n')
       else:
-        rval1 = int(stove.out1cnf()/OUT1CNG_DIRECT)%2
-        rval2 = int(stove.out2cnf()/OUT2CNG_DIRECT)%2
-        if (rval1==rval2):
-          conn.sendall(str(rval1)+'\n')
-          logger.debug(str(rval1))
+        if ('direct2' in data):
+          rval = int(stove.out2cnf()/OUT2CNG_DIRECT)%2
         else:
-          conn.sendall(str(rval1)+'!='+str(rval2)+'\n')
-          logger.debug(str(rval1)+'!='+str(rval2))
+          rval = int(stove.out1cnf()/OUT1CNG_DIRECT)%2
+        conn.sendall(str(rval)+'\n')
+        logger.debug(str(rval))
     #
     #
     #
@@ -301,26 +338,32 @@ def clientthread(conn):
     #
     #
     #
-    if ('autopid' in data):
-      if (data.find('=') == 7):
-        # process cycle=nnn
+    if (('autopid' in data) or ('autopid1' in data) or ('autopid2' in data)):
+      if ('autopid' in data):
+        off=0
+      if ('autopid1' in data):
+        off=1
+      if ('autopid2' in data):
+        off=1
+      if (data.find('=') == 7+off):
+        # process
         try:
-          val = int(data[8:])
+          val = int(data[8+off:])
         except ValueError:
           conn.sendall('?'+'\n')
           continue
-        stove.out1cnf(enable_autopid=(val!=0))
-        stove.out2cnf(enable_autopid=(val!=0))
+        if ('autopid2' in data):
+          stove.out2cnf(enable_autopid=(val!=0))
+        else:
+          stove.out1cnf(enable_autopid=(val!=0))
         conn.sendall('OK'+'\n')
       else:
-        rval1 = int(stove.out1cnf()/OUT1CNG_AUTOPID)%2
-        rval2 = int(stove.out2cnf()/OUT2CNG_AUTOPID)%2
-        if (rval1==rval2):
-          conn.sendall(str(rval1)+'\n')
-          logger.debug(str(rval1))
+        if ('autopid2' in data):
+          rval = int(stove.out2cnf()/OUT2CNG_AUTOPID)%2
         else:
-          conn.sendall(str(rval1)+'!='+str(rval2)+'\n')
-          logger.debug(str(rval1)+'!='+str(rval2))
+          rval = int(stove.out1cnf()/OUT1CNG_AUTOPID)%2
+        conn.sendall(str(rval)+'\n')
+        logger.debug(str(rval))
       continue
     #
     #
@@ -347,7 +390,12 @@ def clientthread(conn):
       if (data.find('=') == 8):
         # process ramptime=[hr,min]
         try:
-          val = eval('['+data[9:-1]+']')
+          if ( (data[9] != '[') and (data[-2]!= ']') ):
+            val = eval('['+data[9:-1]+']')
+          elif ( (data[9] == '[') and (data[-2]== ']') ):
+            val = eval(data[9:-1])
+          else:
+            conn.sendall('?'+'\n')
           if (len(val)!=2):
             conn.sendall('?'+'\n')
             continue
@@ -386,7 +434,7 @@ def clientthread(conn):
       if (data.find('=') == 8):
         # process soaktime=[hr,min]
         try:
-          val = eval('[' + data[9:-1] + '')
+          val = eval('[' + data[9:-1] + ']')
           if (len(val)!=2):
             conn.sendall('?'+'\n')
             continue
@@ -585,6 +633,7 @@ def clientthread(conn):
   # came out of loop
   logger.warning('Client disconnected')
   num_connections-=1
+  stove.standby(status=1)
   conn.close()
   exit()
 
@@ -606,7 +655,7 @@ while 1:
       #
       if (num_connections == 0):
         t_now_s = time()
-        if (t_now_s - t_0_s > LOG_TIME_DT_S):
+        if (t_now_s - t_0_s > LOG_TIME_DT_NONE_S):
           t_0_s = t_now_s
           rval = stove.val()
           logger.info(str(rval) + ' C')
@@ -620,9 +669,12 @@ while 1:
     break
 
   logger.warning( 'Connected with ' + addr[0] + ':' + str(addr[1]) )
+  stove.standby(status=1)
   # start new thread takes 1st argument as a function name to be run,
   # second is the tuple of arguments to the function.
   start_new_thread(clientthread ,(conn,))
 
+stove.standby(status=1)
 s.close()
 logger.warning('Server stopped')
+

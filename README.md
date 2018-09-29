@@ -180,7 +180,8 @@ Go have coffee (or perhaps, cofefe?)
 
 ### Make PID controller auto-tune at a Temperature 101.3 deg C
 
-Disable not needed parameters using commands above.
+Enable PID parameters first, using the commands above, e.g., *antiwindup=1* and 
+*timepid=1*.
 
 ```
 restart
@@ -191,13 +192,12 @@ autopid=1
 OK
 sp1=101.3
 OK
-store sp1
-sp1=101.3 stored
 restart
 ```
 
-Upon exiting the restart the controller enters auto-tune, and stays there until
-it figures out the values of the parameters.
+Followin restart the controller enters auto-tune, which is signalled to user
+by writing 'ATUN' on the display.
+It stays there until it figures out the values of the parameters.
 
 User can query progress of auto-tuning by issuing
 

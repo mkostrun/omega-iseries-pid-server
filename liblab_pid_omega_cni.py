@@ -37,6 +37,14 @@ ECHO = 1
 #
 # Configuration registers
 #
+INPUT_CLASS = 1
+INPUT_RANGE = 4
+INPUT_RTD_RVAL = 64
+#
+RDGCNG_DECIMAL_POINT = 1
+RDGCNG_DEG_FARENHEIT   = 16
+RDGCNG_FILTER_CONSTANT = 32
+#
 OUT1CNG_AUTOTUNE      = 32
 OUT1CNG_ANTI_WIND_UP  = 16
 OUT1CNG_AUTOPID       = 4
@@ -119,6 +127,160 @@ class omega_pid:
     else:
       rval = None
     return rval
+
+  def input_type_format(self,use_tc='k',use_rtd_value=None,use_rtd_curve=None,
+    use_proc=None):
+    self.readline() # clean serial buffer
+    # configuration register
+    global INPUT_CLASS,INPUT_RANGE,INPUT_RTD_RVAL
+    cmd='07'
+    self.write(REC_CHAR + READ_CMD + cmd + EOL)
+    reply = self.readline()
+    if (len(reply)>1):
+      if (READ_CMD+cmd in reply):
+        rval = int(reply[3:-1],16)
+      else:
+        rval = int(reply[:-1],16)
+      rval_new = rval
+      #
+      # configure thermocouple: class and type
+      #
+      if (use_tc is not None):
+        if (use_tc == 'k'):
+          tc_val = 1
+        elif (use_tc == 't'):
+          tc_val = 2
+        elif (use_tc == 'e'):
+          tc_val = 3
+        elif (use_tc == 'n'):
+          tc_val = 4
+        elif (use_tc == 'j'):
+          tc_val = 5
+        elif (use_tc == 'r'):
+          tc_val = 6
+        elif (use_tc == 's'):
+          tc_val = 7
+        elif (use_tc == 'b'):
+          tc_val = 8
+        elif (use_tc == 'c'):
+          tc_val = 9
+        else:
+          tc_val = 0
+        e1 = int(rval_new/INPUT_RANGE) % 16
+        if (tc_val != e1):
+          rval_new += (tc_val - e1) * INPUT_RANGE
+        e2 = int(rval_new/INPUT_CLASS) % 4
+        if (e2!=0):
+          rval_new -= e2 * INPUT_CLASS
+      #
+      # configure RTD value and curve
+      #
+      elif ((use_rtd_value is not None) and (use_rtd_curve is not None)):
+        e1 = int(rval_new/INPUT_CLASS) % 4
+        if (e1 != 1):
+          rval_new += (1-e1) * INPUT_RANGE
+        e2 = int(rval_new/INPUT_RTD_RVAL) % 4
+        if (use_rtd_value == 100):
+          vval = 0
+        elif (use_rtd_value == 500):
+          vval = 1
+        else:
+          vval = 2
+        if (vval != e2):
+          rval_new += (vval - e2) * INPUT_RTD_RVAL
+        e3 = int(rval_new/INPUT_RANGE) % 16
+        if (use_rtd_curve == 392.3):
+          cval=1
+        elif (use_rtd_curve == 392.4):
+          cval=2
+        elif (use_rtd_curve == 385.2):
+          cval=3
+        elif (use_rtd_curve == 385.3):
+          cval=4
+        elif (use_rtd_curve == 385.4):
+          cval=5
+        else:
+          cval=0
+        if (cval != e3):
+          rval_new += (cval - e3) * INPUT_RANGE
+      elif (use_proc is not None):
+        e1 = int(rval_new/INPUT_CLASS) % 4
+        if (e1 != 2):
+          rval_new += (2-e1) * INPUT_RANGE
+        if (use_proc == 1.0):
+          pval=1
+        elif (use_proc == 10.0):
+          pval=2
+        elif (use_proc == 0.20):
+          pval=3
+        else:
+          pval=0
+        e2 = int(rval_new/INPUT_RANGE) % 16
+        if (pval != e2):
+          rval_new += (pval - e2) * INPUT_RANGE
+      #
+      # write it all down
+      #
+      if (rval_new != rval):
+        rval='{:02X}'.format(int(rval_new))
+        self.write(REC_CHAR + WRITE_CMD +  cmd + rval + EOL)
+    else:
+      rval = None
+    return rval
+
+  def rdgcnf(self,decimal_point=None,degrees_f=None,filter_const=None):
+    self.readline() # clean serial buffer
+    # configuration register
+    global RDGCNG_DECIMAL_POINT,RDGCNG_DEG_FARENHEIT,RDGCNG_FILTER_CONSTANT
+    cmd='08'
+    self.write(REC_CHAR + READ_CMD + cmd + EOL)
+    reply = self.readline()
+    if (len(reply)>1):
+      if (READ_CMD+cmd in reply):
+        rval = int(reply[3:-1],16)
+      else:
+        rval = int(reply[:-1],16)
+      rval_new = rval
+      if (decimal_point is not None):
+        if ((decimal_point>=1) and (decimal_point!=4)):
+          e1 = int(rval_new/RDGCNG_DECIMAL_POINT) % 8
+          if (decimal_point != e1):
+            rval_new += (decimal_point - e1) * RDGCNG_DECIMAL_POINT
+      if (degrees_f is not None):
+        e1 = int(rval_new/RDGCNG_DEG_FARENHEIT) % 2
+        if (degrees_f != e1):
+          rval_new += (degrees_f - e1) * RDGCNG_DEG_FARENHEIT
+      if (filter_const is not None):
+        if ( (filter_const==1) or (filter_const==2)
+          or (filter_const==4) or (filter_const==8)
+          or (filter_const==16) or (filter_const==32)
+          or (filter_const==64) or (filter_const==128) ):
+          e1 = int(rval_new/RDGCNG_FILTER_CONSTANT) % 8
+          if (filter_const==1):
+            log2_fc=0
+          elif (filter_const==2):
+            log2_fc=1
+          elif (filter_const==4):
+            log2_fc=2
+          elif (filter_const==8):
+            log2_fc=3
+          elif (filter_const==16):
+            log2_fc=4
+          elif (filter_const==32):
+            log2_fc=5
+          elif (filter_const==64):
+            log2_fc=6
+          elif (filter_const==128):
+            log2_fc=7
+          if (log2_fc != e1):
+            rval_new += (log2_fc - e1) * RDGCNG_FILTER_CONSTANT
+          if (rval_new != rval):
+            rval='{:02X}'.format(int(rval_new))
+            self.write(REC_CHAR + WRITE_CMD +  cmd + rval + EOL)
+    else:
+      rval = None
+    return rval
+
 
   def misccnf(self,sp_dev=None,enable_self=None,full_id=None,sp_id=None):
     self.readline() # clean serial buffer
